@@ -22,7 +22,8 @@ validInput.addEventListener('input', debounce(onSearch, 500))
 
 function onSearch(evt) {
     evt.preventDefault()
-    const inputValue = evt.target.value
+    let inputValue = ''
+    inputValue = evt.target.value
     if (inputValue === '') {return}
     clearContainer()
     fetchCountries(inputValue).then(countries => {
