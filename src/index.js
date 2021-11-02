@@ -12,6 +12,7 @@ import { fetchCountries } from './js/fetchCountries.js';
 const validInput = document.getElementById('validation-input')
 const debounce = require('lodash.debounce')
 
+
 const refs = {
     bodySt: document.querySelector('body'),
     listOfCountries: document.querySelector('.country-list'),
@@ -19,6 +20,7 @@ const refs = {
 }
 
 validInput.addEventListener('input', debounce(onSearch, 500))
+
 
 function onSearch(evt) {
     evt.preventDefault()
@@ -30,13 +32,34 @@ function onSearch(evt) {
         if (countries.length > 10) { listToLong()} else
         if (countries.length < 10 && countries.length >= 2) { makeList(countries) }
         else if (countries.length === 1) { makeCard(countries) }
-    })
+    }).catch(error => console.log(error))
 }
 
 function makeList(e) {
+    
     let result = templateCountriesList(e)
     refs.listOfCountries.insertAdjacentHTML('beforeend', result)
+    
+    const activeListCountries = document.querySelector('.country-list')
+    activeListCountries.addEventListener('click', (evt) => {
+        evt.preventDefault()
+        console.log(evt.target.innerHTML)
+        fetchCountries(evt.target.innerHTML).then((countries) => {
+            clearContainer()
+            makeCard(countries)
+            
+        })
+})
+    
 }
+
+// function makeActiveList(e) {
+//     console.dir(e)
+//     makeCard(e)
+// }
+   
+
+
 function makeCard(e) {
     let resultCountry = templateCountryCard(e)
     refs.cardOfCountry.insertAdjacentHTML('beforeend', resultCountry)
